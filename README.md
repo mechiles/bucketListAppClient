@@ -15,3 +15,5 @@ var base = "http://ec2-11-22-33-44.us-west-2.compute.amazonaws.com:3000/";
 
 After those changes, you should be able to submit the full code to Phone Gap Build to get your iOS, Android and Windows apps built.
 
+UPDATE: The app will now let you edit your Bucket List entries.
+
