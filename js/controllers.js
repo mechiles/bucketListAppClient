@@ -4,6 +4,8 @@ angular.module('bucketList.controllers', ['bucketList.services'])
     // if the user is already logged in, take him to his bucketlist
     if ($rootScope.isSessionActive()) {
         $window.location.href = ('#/bucket/list');
+    } else {
+        $window.location.href = ('#/auth/signin');
     }
 
     $scope.user = {
@@ -42,7 +44,7 @@ angular.module('bucketList.controllers', ['bucketList.services'])
     };
 
     $scope.createUser = function () {
-    	var email = this.user.email;
+    	  var email = this.user.email;
         var password = this.user.password;
         var uName = this.user.name;
         if(!email || !password || !uName) {
@@ -60,12 +62,9 @@ angular.module('bucketList.controllers', ['bucketList.services'])
             $window.location.href = ('#/bucket/list');
         }).error(function (error) {
             $rootScope.hide();
-        	if(error.error && error.error.code == 11000)
-        	{
+        	if(error.error && error.error.code == 11000) {
         		$rootScope.notify("A user with this email already exists");
-        	}
-        	else
-        	{
+        	} else {
         		$rootScope.notify("Oops something went wrong, Please try again!");
         	}
 
@@ -100,19 +99,19 @@ angular.module('bucketList.controllers', ['bucketList.services'])
                 $scope.newTemplate.show();
             };
 
-            $ionicModal.fromTemplateUrl('templates/editItem.html', function (modal) {
-                $scope.editTemplate = modal;
+            $ionicModal.fromTemplateUrl('templates/editItem.html', function(modal) {
+              $scope.editTemplate = modal;
+            }, {
+              scope: $scope,
+              focusFirstInput: true
             });
             $scope.editTask = function (id, text) {
-              $scope.data = {
+              $rootScope.editData = {
                 id : id,
-                text : text
+                item : text
               }
-               $scope.alert = function(){
-                 alert('Hi ' + $scope.data.id);
-               }
-               $scope.alert();
-              $scope.editTemplate.show(data.id);
+
+              $scope.editTemplate.show();
             };
             $rootScope.hide();
         }).error(function (data, status, headers, config) {
@@ -160,21 +159,15 @@ angular.module('bucketList.controllers', ['bucketList.services'])
                         $scope.list.push(data[i]);
                     }
                 };
-                if(data.length > 0 & $scope.list.length == 0)
-                {
+                if(data.length > 0 & $scope.list.length == 0) {
                     $scope.incomplete = true;
-                }
-                else
-                {
+                } else {
                     $scope.incomplete = false;
                 }
 
-                if(data.length == 0)
-                {
+                if(data.length == 0) {
                     $scope.noData = true;
-                }
-                else
-                {
+                } else {
                     $scope.noData = false;
                 }
             }).error(function (data, status, headers, config) {
@@ -202,15 +195,13 @@ angular.module('bucketList.controllers', ['bucketList.services'])
 	        item: ""
 	    };
 
-        $scope.close = function () {
+        $scope.newClose = function () {
             $scope.modal.hide();
         };
 
         $scope.createNew = function () {
-			var item = this.data.item;
-        	if (!item) return;
+			    var item = this.data.item;
             $scope.modal.hide();
-            $rootScope.show();
 
             $rootScope.show("Please wait... Creating new");
 
@@ -234,28 +225,31 @@ angular.module('bucketList.controllers', ['bucketList.services'])
         };
     })
 
-.controller('editCtrl', function ($rootScope, $scope, API, $window) {
+.controller('editCtrl', function($rootScope, $scope, API, $window) {
 
-        $scope.editItem = function (id) {
-          API.getAll($rootScope.getToken()).success(function (data, status, headers, config) {
-          $rootScope.show("Please wait... Processing");
-          $scope.list = [];
-          for (var i = 0; i < data.length; i++) {
-              if (data[i].isCompleted == false) {
-                  $scope.list.push(data[i]);
-              }
-          };
-        })
-        $rootScope.show("Please wait... Updating Item");
-        API.editItem(id, {
-            item : item
-        }, $rootScope.getToken())
-            .success(function (data, status, headers, config) {
-                $rootScope.hide();
-                $rootScope.doRefresh(1);
-            }).error(function (data, status, headers, config) {
-                $rootScope.hide();
-                $rootScope.notify("Oops something went wrong!! Please try again later");
-            });
-    };
-  })
+  $scope.editClose = function () {
+      $scope.editTemplate.hide();
+  };
+
+  $scope.editItem = function() {
+    var item = this.editData.item,
+    id = this.editData.id;
+    if (!item) return;
+
+    $rootScope.show("Please Wait... Updating Item.")
+
+    API.editItem(id, {
+      item : item
+    },
+    $rootScope.getToken())
+
+    .success(function(data, status, headers, config) {
+      $rootScope.hide();
+      $scope.editTemplate.hide();
+      $rootScope.doRefresh(1);
+    }).error(function(data, status, headers, config) {
+      $rootScope.hide();
+      $rootScope.notify("Oops something went wrong!! Plesae try again later.");
+    });
+  };
+})

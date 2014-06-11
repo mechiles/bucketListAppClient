@@ -12,7 +12,7 @@
          </span>
          <br/>  <br/>
          <p class="actions padding">
-           <button class="button button-clear" ng-click="editTask('{{item._id}}')">Edit</button>
+            <i class="ion-edit icon-actions margin" ng-click="editTask('{{item._id}}','{{item.item}}')"></i>
             <i class="ion-checkmark-circled icon-actions margin" ng-click="markCompleted('{{item._id}}')"></i>
             <i class="ion-trash-b icon-actions margin" ng-click="deleteItem('{{item._id}}')"></i>
          </p>
