@@ -1,32 +1,17 @@
-This is an addon starter template for the [Ionic Framework](http://ionicframework.com/).
+bucketListAppClient
+===================
 
-## How to use this template
+This is the Bucket List Todo Front End. This will be the face of the app and a site, if you so choose.
 
-*This template does not work on its own*. It is missing the Ionic library, and AngularJS.
+This front end goes into conjunction with the bucketListAppAPI.
 
-To use this, either create a new ionic project using the ionic node.js utility, or copy and paste this into an existing Cordova project and download a release of Ionic separately.
+Specific changes will need to be made to the services.js file in /js on line 3. Make the "base" URL the same as where you'll be hosting the server API.
 
-### With the Ionic tool:
+var base = "http://localhost:3000;
 
-Take the name after `ionic-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
+My public facing API server is an AWS EC2 instance, so my variable is close to this:
 
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myApp blank
-```
+var base = "http://ec2-11-22-33-44.us-west-2.compute.amazonaws.com:3000/";
 
-Then, to run it, cd into `myApp` and run:
+After those changes, you should be able to submit the full code to Phone Gap Build to get your iOS, Android and Windows apps built.
 
-```bash
-$ ionic platform add ios
-$ ionic build ios
-$ ionic emulate ios
-```
-
-Substitute ios for android if not on a Mac, but if you can, the ios development toolchain is a lot easier to work with until you need to do anything custom to Android.
-
-## Demo
-http://plnkr.co/edit/tpl:IUU30p?p=preview
-
-## Issues
-Issues have been disabled on this repo, if you do find an issue or have a question consider posting it on the [Ionic Forum](http://forum.ionicframework.com/).  Or else if there is truly an error, follow our guidelines for [submitting an issue](http://ionicframework.com/contribute/#issues) to the main Ionic repository. On the other hand, pull requests are welcome here!
